@@ -22,7 +22,7 @@ $coins = [
 
 function formatMoney(int $amount, string $currency = '€'): string
 {
-    return ($amount / 100) . $currency . " ";
+    return number_format(($amount / 100),2 ). $currency;
 }
 
 echo "Welcome!\n";
@@ -38,10 +38,11 @@ echo "You selected - " . $selectedProduct->title . " " .formatMoney($product->pr
 $insertedCoins = 0;
 
 while($insertedCoins < $selectedProduct->price) {
-    echo "You inserted " . formatmoney($insertedCoins)."\n";
+    echo "You inserted " . formatmoney($insertedCoins).".\n";
     $coinInput = (int)readline("\nPlease insert more coins: ");
     if (!in_array($coinInput, array_keys($coins))) {
         echo "Invalid coin!\n";
+
     } else {
         $insertedCoins += $coinInput;
     }
@@ -58,7 +59,7 @@ foreach ($coins as $value => $amount) {
     $times = intdiv($remainder, $value);
     if($times !== 0){
         $remainder -= $value * $times;
-        $coinsReturned .= formatMoney($value);
+        $coinsReturned .= formatMoney($value). " ";
         $amount -= $times;
     }
 }
