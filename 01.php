@@ -1,4 +1,5 @@
 <?php
+
 function createProducts(int $id, string $title, int $price): stdClass
 {
     $items = new stdClass();
@@ -17,28 +18,28 @@ $products = [
 
 //Key is coin value and value is the amount of keys.
 $coins = [
-    200 => 50, 100 => 40, 50 => 0, 20 => 10, 10 => 40,5 => 10, 2 => 20, 1 => 30
+    200 => 50, 100 => 40, 50 => 0, 20 => 10, 10 => 40, 5 => 10, 2 => 20, 1 => 30
 ];
 
 function formatMoney(int $amount, string $currency = '€'): string
 {
-    return number_format(($amount / 100),2 ). $currency;
+    return number_format(($amount / 100), 2) . $currency;
 }
 
 echo "Welcome!\n";
 echo "Products Available: \n";
 foreach ($products as $product) {
-    echo $product->id. ". " . $product->title . " - " . formatMoney($product->price). "\n";
+    echo $product->id . ". " . $product->title . " - " . formatMoney($product->price) . "\n";
 }
 $userSelection = (int)readline("<< ");
 echo PHP_EOL;
 $selectedProduct = $products[$userSelection];
-echo "You selected - " . $selectedProduct->title . " " .formatMoney($product->price) ."\n";
+echo "You selected - " . $selectedProduct->title . " " . formatMoney($product->price) . "\n";
 
 $insertedCoins = 0;
 
-while($insertedCoins < $selectedProduct->price) {
-    echo "You inserted " . formatmoney($insertedCoins).".\n";
+while ($insertedCoins < $selectedProduct->price) {
+    echo "You inserted " . formatmoney($insertedCoins) . ".\n";
     $coinInput = (int)readline("\nPlease insert more coins: ");
     if (!in_array($coinInput, array_keys($coins))) {
         echo "Invalid coin!\n";
@@ -57,9 +58,9 @@ foreach ($coins as $value => $amount) {
         break;
     }
     $times = intdiv($remainder, $value);
-    if($times !== 0){
+    if ($times !== 0) {
         $remainder -= $value * $times;
-        $coinsReturned .= formatMoney($value). " ";
+        $coinsReturned .= formatMoney($value) . " ";
         $amount -= $times;
     }
 }
