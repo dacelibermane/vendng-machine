@@ -1,19 +1,18 @@
 <?php
 
-function createProducts(int $id, string $title, int $price): stdClass
+function createProducts(string $title, int $price): stdClass
 {
     $items = new stdClass();
-    $items->id = $id;
     $items->title = $title;
     $items->price = $price;
     return $items;
 }
 
 $products = [
-    createProducts(0, 'Black Coffee', 120),
-    createProducts(1, 'White Coffee', 130),
-    createProducts(2, 'Latte', 500),
-    createProducts(3, 'Cappuccino', 150)
+    createProducts('Black Coffee', 120),
+    createProducts('White Coffee', 130),
+    createProducts('Latte', 500),
+    createProducts('Cappuccino', 150)
 ];
 
 //Key is coin value and value is the amount of keys.
@@ -28,10 +27,12 @@ function formatMoney(int $amount, string $currency = '€'): string
 
 echo "Welcome!\n";
 echo "Products Available: \n";
-foreach ($products as $product) {
-    echo $product->id . ". " . $product->title . " - " . formatMoney($product->price) . "\n";
+foreach ($products as $key => $product) {
+
+    echo $key + 1 . ". " . $product->title . " - " . formatMoney($product->price) . "\n";
 }
 $userSelection = (int)readline("<< ");
+$userSelection -= 1;
 echo PHP_EOL;
 $selectedProduct = $products[$userSelection];
 echo "You selected - " . $selectedProduct->title . " " . formatMoney($product->price) . "\n";
@@ -51,20 +52,34 @@ while ($insertedCoins < $selectedProduct->price) {
 
 $remainder = $insertedCoins - $selectedProduct->price;
 
+
 $coinsReturned = '';
 echo "Your remainder is " . formatMoney($remainder) . "\n";
-foreach ($coins as $value => $amount) {
-    if ($remainder <= 0) {
-        break;
+while ($remainder > 0) {
+
+    foreach ($coins as $value => $amount) {
+        if ($amount <= 0) {
+            continue;
+        }
+        $times = intdiv($remainder, $value);
+        $coins[$value] -= $times;
+
+        $coinCount = $amount - $times;
+        if ($coinCount < 0) $times += $coinCount;
+
+        if ($times !== 0) {
+            $remainder -= $value * $times;
+            $coinsReturned .= formatMoney($value) . " x " . $times . " ||";
+        }
     }
-    $times = intdiv($remainder, $value);
-    if ($times !== 0) {
-        $remainder -= $value * $times;
-        $coinsReturned .= formatMoney($value) . " ";
-        $amount -= $times;
+    if ($remainder > 0) {
+        echo "Failed to give back remainder";
+        break;
     }
 }
 
-echo "Coins returned - " . $coinsReturned;
+echo "Coins returned = " . $coinsReturned;
+
+
 
 
